@@ -54,8 +54,24 @@ static const int GRID_COLUMNS = 10;
 }
 
 -(void)updateCreatures{
-    [self countNeighbors];
-
+    for (int i = 0; i < [_gridArray count]; i++) {
+        for (int j = 0; j <[_gridArray[i] count]; j++) {
+            Creature *currentCreature = _gridArray[i][j];
+            currentCreature.livingNeighbors = 0;
+            for (int x = (i - 1); x <= (i + 1); x++) {
+                for (int y = (j - 1); y <= (j+1); y++) {
+                    BOOL isIndexValid;
+                    isIndexValid = [self isIndexValidForX:x andY:y];
+                    if (!((x == i) && (y == j))&& isIndexValid){
+                        Creature *neighbor = _gridArray[x][y];
+                        if (neighbor.isAlive) {
+                            currentCreature.livingNeighbors += 1;
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 -(BOOL) isIndexValidForX:(int)x andY:(int)y{
